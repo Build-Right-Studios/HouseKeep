@@ -1,7 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
-
-import authRoutes from "./routes/auth.routes.js";
+import registerRoutes from "./routes.js";
+import connectMongoDB from "./config/mongodb.js"
 
 dotenv.config();
 
@@ -9,12 +9,9 @@ const app = express();
 
 app.use(express.json());
 
-app.use((req, res, next) => {
-  console.log("REQUEST HIT:", req.method, req.url);
-  next();
-});
+await connectMongoDB();
 
-app.use("/api/v1/auth", authRoutes);
+registerRoutes(app);
 
 const PORT = process.env.PORT || 5000;
 
