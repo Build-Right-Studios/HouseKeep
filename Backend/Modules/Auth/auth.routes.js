@@ -1,5 +1,8 @@
 import express from "express";
-import { signup, verifyOTP, login, verifyLoginOTP } from "../controllers/auth.controller.js";
+import { signup } from "./Controller/Signup.js";
+import { verifyOTP } from "./Controller/Verifyotp.js"
+import { login } from "./Controller/Login.js";
+import { verifyLoginOTP } from "./Controller/VerifyLoginotp.js";
 
 const router = express.Router();
 
