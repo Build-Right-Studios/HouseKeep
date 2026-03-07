@@ -19,12 +19,6 @@ export const verifyLoginOTPService = async ({ phone, otp }) => {
 
   await redisClient.del(`otp:${phone}`);
 
-  const user = {
-    id: "userId",
-    fullName: "Aryesh",
-    phone
-  };
-
   const accessToken = generateAccessToken(user.id);
   const refreshToken = generateRefreshToken(user.id);
 
