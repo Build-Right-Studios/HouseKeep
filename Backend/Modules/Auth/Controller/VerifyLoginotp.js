@@ -2,8 +2,9 @@ import { verifyLoginOTPService } from "../Service/VerifyLoginotpService.js";
 
 export const verifyLoginOTP = async (req, res) => {
   try {
+    const { phone, otp } = req.body;
 
-    const data = await verifyLoginOTPService(req.body);
+    const data = await verifyLoginOTPService({ phone, otp });
 
     res.status(200).json({
       success: true,
