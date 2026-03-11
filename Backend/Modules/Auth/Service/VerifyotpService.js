@@ -1,5 +1,4 @@
 import redisClient from "../../../config/redis.js";
-import { generateAccessToken, generateRefreshToken } from "../../../utils/jwt.js";
 
 export const verifyOTPService = async ({ phone, otp }) => {
 
@@ -8,29 +7,18 @@ export const verifyOTPService = async ({ phone, otp }) => {
   }
 
   const storedOTP = await redisClient.get(`otp:${phone}`);
+  console.log(storedOTP);
 
   if (!storedOTP) {
-    throw new Error("OTP expired");
+    throw new Error("Incorrect Details");
   }
 
   if (storedOTP !== otp) {
     throw new Error("Invalid OTP");
   }
 
-  await redisClient.del(`otp:${phone}`);
-
-  const user = {
-    id: "userId",
-    fullName: "Aryesh",
-    phone
-  };
-
-  const accessToken = generateAccessToken(user.id);
-  const refreshToken = generateRefreshToken(user.id);
-
-  return {
-    accessToken,
-    refreshToken,
-    user
-  };
+  if(storedOTP === otp){
+    await redisClient.del(`otp:${phone}`);
+    return true;
+  }
 };

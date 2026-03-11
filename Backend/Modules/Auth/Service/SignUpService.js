@@ -10,6 +10,7 @@ export const signupService = async ({ fullName, email, phone }) => {
   const otp = Math.floor(100000 + Math.random() * 900000);
 
   await redisClient.set(`otp:${phone}`, otp, { EX: 300 });
+  console.log("OTP Generated")
 
   await sendOTP(phone, otp);
 
