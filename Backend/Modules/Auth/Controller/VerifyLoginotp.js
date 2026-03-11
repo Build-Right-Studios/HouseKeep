@@ -8,9 +8,9 @@ export const verifyLoginOTP = async (req, res) => {
 
     res.status(200).json({
       success: true,
+      userName: data.userName,
       accessToken: data.accessToken,
       refreshToken: data.refreshToken,
-      user: data.user
     });
 
   } catch (error) {

@@ -1,6 +1,6 @@
 import redisClient from "../../../config/redis.js";
 import { sendOTP } from "../../../Modules/Messaging/Service/twilio.js";
-import { User } from "../../../MongoDB/models.js"
+import { checkUserService } from "../../Users/Service/checkUserService.js";
 
 export const loginService = async ({ phone }) => {
 
@@ -9,10 +9,12 @@ export const loginService = async ({ phone }) => {
   }
 
   //add a check 
-  const user = await User.findOne({ phone })
+  await checkUserService({ phone });
 
-  if(!user){
-    throw new Error("User not registered. Please signup first.")
+   const existingOTP = await redisClient.get(`otp:${phone}`);
+
+  if (existingOTP) {
+    throw new Error("OTP already sent. Please wait.");
   }
 
   const otp = Math.floor(100000 + Math.random() * 900000);
