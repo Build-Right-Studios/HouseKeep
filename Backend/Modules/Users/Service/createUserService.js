@@ -1,35 +1,21 @@
-import {
-  generateAccessToken,
-  generateRefreshToken,
-} from "../../../utils/jwt.js";
-import { User } from "../../../MongoDB/models.js";
+import { generateAccessToken, generateRefreshToken } from "../../../utils/jwt.js";
+import { createUserInternal } from "../Internal/createUserInternal.js";
 
 export const createUserService = async ({ fullName, email, phone }) => {
-  try {
-    let user = await User.findOne({ phone });
 
-    if(user){
-        throw new Error("User already exits")
-    }
+  const user = await createUserInternal({
+    fullName,
+    email,
+    phone
+  });
 
-    if (!user) {
-      user = await User.create({
-        fullName,
-        email,
-        phone,
-      });
-    }
+  const accessToken = generateAccessToken(user._id);
+  const refreshToken = generateRefreshToken(user._id);
 
-    const accessToken = generateAccessToken(user.id);
-    const refreshToken = generateRefreshToken(user.id);
+  return {
+    userName: user.fullName,
+    accessToken,
+    refreshToken
+  };
 
-    return {
-      userName: user.fullName,
-      accessToken,
-      refreshToken,
-    };
-  } catch(error) {
-    console.log("Error in creating user");
-    throw error;
-  }
 };

@@ -11,7 +11,7 @@ export const verifyLoginOTPService = async ({ phone, otp }) => {
   const storedOTP = await redisClient.get(`otp:${phone}`);
 
   if (!storedOTP) {
-    throw new Error("Incorrect Details");
+    throw new Error("Incorrect Details"); 
   }
 
   if (storedOTP !== otp) {
